@@ -9,4 +9,4 @@ replace [WEBSITE] with the intended target, copy to OpenBullet config folder, co
 
 I will likely eventually set this up as a python script since it's not massively complicated and OpenBullet is unneccesary.
 
-Additionally, the use of two different subdomains to make requests to means that this script might not be as cross-compatible as it should be, so finding a solution to just derive the url of shibboleth via the portal would be ideal
+Additionally, the use of two different subdomains to make requests means that this script might not be as cross-compatible as it should be, so finding a solution to just derive the url of shibboleth via the portal would be ideal
