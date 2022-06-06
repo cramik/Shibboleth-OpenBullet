@@ -67,13 +67,13 @@ REQUEST POST "https://shibboleth.[WEBSITE]/idp/profile/SAML2/Redirect/SSO?execut
 
 KEYCHECK 
   KEYCHAIN Failure OR 
-    KEY "The username you entered cannot be identified."  ## User with username does not exist
+    KEY "The username you entered cannot be identified."
   KEYCHAIN Custom "CUSTOM" OR 
-    KEY "The password you entered was incorrect." ## Account exists, password is wrong 
+    KEY "The password you entered was incorrect."
   KEYCHAIN Success OR 
-    KEY "My Settings &amp; Devices" ## Hit Duo, creds were right
+    KEY "My Settings &amp; Devices"
   KEYCHAIN Retry OR 
-    KEY "LDAPException" ## Server is overloaded
+    KEY "LDAPException"
   KEYCHAIN Custom "CUSTOM" OR 
     KEY "Account Locked"
 
